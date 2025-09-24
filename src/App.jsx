@@ -3,13 +3,14 @@ import "./App.css";
 
 function App() {
   const [todoList, setTodoList] = useState([
-    { id: 0, content: "123" },
+    { id: 0, content: "휴식하기" },
     { id: 1, content: "코딩 공부하기" },
-    { id: 2, content: "잠 자기" },
+    { id: 2, content: "블로그에 복습내용 정리하기" },
   ]);
 
   return (
     <>
+      <h1 className="header">나의 ToDo List</h1>
       <TodoList todoList={todoList} setTodoList={setTodoList} />
       <hr />
       <TodoInput todoList={todoList} setTodoList={setTodoList} />
@@ -51,25 +52,48 @@ function TodoList({ todoList, setTodoList }) {
 }
 
 function Todo({ todo, setTodoList }) {
-  const [inputValue, setInputValue] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(todo.content);
+
+  const handleEdit = () => {
+    if (isEditing) {
+      setTodoList((prev) =>
+        prev.map((el) =>
+          el.id === todo.id ? { ...el, content: inputValue } : el
+        )
+      );
+    }
+    setIsEditing((prev) => !prev);
+  };
+
   return (
     <li>
-      {todo.content}
       <input
-        value={inputValue}
-        onChange={(event) => setInputValue(event.target.value)}
-      />
-      <button
-        onClick={() => {
+        type="checkbox"
+        checked={todo.completed}
+        onChange={() =>
           setTodoList((prev) =>
             prev.map((el) =>
-              el.id === todo.id ? { ...el, content: inputValue } : el
+              el.id === todo.id ? { ...el, completed: !el.completed } : el
             )
-          );
-        }}
-      >
-        수정
-      </button>
+          )
+        }
+      />
+      {todo.content}
+      {isEditing ? (
+        <input
+          value={inputValue}
+          onChange={(event) => setInputValue(event.target.value)}
+          autoFocus
+        />
+      ) : (
+        <span
+          style={{ textDecoration: todo.completed ? "line-through" : "none" }}
+        >
+          {todo.content}
+        </span>
+      )}
+      <button onClick={handleEdit}>수정</button>
       <button
         onClick={() => {
           setTodoList((prev) => {
