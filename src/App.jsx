@@ -68,21 +68,26 @@ function Todo({ todo, setTodoList }) {
           )
         }
       />
-      {todo.content}
-      {isEdit && (
+
+      {isEdit ? (
         <input
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
         />
+      ) : (
+        todo.content
       )}
+
       <button
         onClick={() => {
-          setTodoList((prev) =>
-            prev.map((el) =>
-              el.id === todo.id ? { ...el, content: inputValue } : el
-            )
-          );
-          setIsEdit(true);
+          if (isEdit) {
+            setTodoList((prev) =>
+              prev.map((el) =>
+                el.id === todo.id ? { ...el, content: inputValue } : el
+              )
+            );
+          }
+          setIsEdit((prev) => !prev);
         }}
       >
         수정
