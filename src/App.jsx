@@ -52,19 +52,8 @@ function TodoList({ todoList, setTodoList }) {
 }
 
 function Todo({ todo, setTodoList }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [inputValue, setInputValue] = useState(todo.content);
-
-  const handleEdit = () => {
-    if (isEditing) {
-      setTodoList((prev) =>
-        prev.map((el) =>
-          el.id === todo.id ? { ...el, content: inputValue } : el
-        )
-      );
-    }
-    setIsEditing((prev) => !prev);
-  };
+  const [inputValue, setInputValue] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
 
   return (
     <li>
@@ -80,20 +69,24 @@ function Todo({ todo, setTodoList }) {
         }
       />
       {todo.content}
-      {isEditing ? (
+      {true && (
         <input
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
-          autoFocus
         />
-      ) : (
-        <span
-          style={{ textDecoration: todo.completed ? "line-through" : "none" }}
-        >
-          {todo.content}
-        </span>
       )}
-      <button onClick={handleEdit}>수정</button>
+      <button
+        onClick={() => {
+          setTodoList((prev) =>
+            prev.map((el) =>
+              el.id === todo.id ? { ...el, content: inputValue } : el
+            )
+          );
+          setIsEdit(true);
+        }}
+      >
+        수정
+      </button>
       <button
         onClick={() => {
           setTodoList((prev) => {
