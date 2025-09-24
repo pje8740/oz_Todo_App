@@ -69,7 +69,7 @@ function Todo({ todo, setTodoList }) {
         }
       />
       {todo.content}
-      {true && (
+      {isEdit && (
         <input
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
